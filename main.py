@@ -11,11 +11,17 @@ if __name__ == '__main__':
         print("webhook_url not found")
         sys.exit(1)
     while 1:
-        dat = yf.Ticker("MSFT")
-        current_time = datetime.now().strftime("%H:%M:%S")
-        current_price = float(dat.info.get("currentPrice"))
+        dat = yf.Ticker("GOOGL")
+        current_price = dat.info.get("currentPrice")
+        if current_price is not None:
+            current_price = float(current_price)
+        else:
+            continue
+        current_time = datetime.now()
+        if current_time is not None:
+            current_time = current_time.strftime("%H:%M:%S")
         print(f'{current_time} current_price = {current_price}')
-        if current_price >= float(535.07):
+        if current_price <= float(351.00):
             send_message(current_price, config['webhook_url'])
             time.sleep(60) # send next message after 1 minutes (prevent rate limit exceed)
         time.sleep(1) #refresh stock price data every 1 seconds
